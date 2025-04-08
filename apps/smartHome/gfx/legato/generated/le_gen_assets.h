@@ -358,6 +358,15 @@ extern leImage sensorsCard;
  ***********************************/
 extern leImage SecurityCard;
 
+/*********************************
+ * Legato Image Asset
+ * Name:   robVacuumOn
+ * Size:   137x136 pixels
+ * Type:   RGB Data
+ * Format: RGBA_8888
+ ***********************************/
+extern leImage robVacuumOn;
+
 /*****************************************************************************
  * Legato Graphics Font Assets
  *****************************************************************************/
@@ -441,9 +450,10 @@ extern leRasterFont notoSansBold_120;
  * Height:       21
  * Baseline:     11
  * Style:        Antialias
- * Glyph Count:  95
- * Range Count:  15
- * Glyph Ranges: 0x20-0x7E
+ * Glyph Count:  96
+ * Range Count:  14
+ * Glyph Ranges: 0xA
+                 0x20-0x7E
 ***********************************/
 extern leRasterFont notoSansBold_14;
 
@@ -463,7 +473,7 @@ extern leRasterFont notoSansBold_25;
  * Legato String Table
  * Encoding        ASCII
  * Language Count: 1
- * String Count:   54
+ * String Count:   55
  *****************************************************************************/
 
 // language IDs
@@ -479,51 +489,52 @@ extern leRasterFont notoSansBold_25;
 #define stringID_warning    6
 #define stringID_WindowB    7
 #define stringID_TemperatureExample    8
-#define stringID_home    9
-#define stringID_kichen    10
-#define stringID_SleepMode    11
-#define stringID_CLOSED    12
-#define stringID_TVB    13
-#define stringID_VacationMode    14
-#define stringID_OFF    15
-#define stringID_figmaStr_Lights_On    16
-#define stringID_livRoomB    17
-#define stringID_figmaStr_WindowsOpen    18
-#define stringID_figmaStr_Doorbell_Camera    19
-#define stringID_one    20
-#define stringID_figmaStr_BlindsOpen    21
-#define stringID_ON    22
-#define stringID_zero    23
-#define stringID_TV    24
-#define stringID_DoorB    25
-#define stringID_lamp1b    26
-#define stringID_Door    27
-#define stringID_Garage    28
-#define stringID_BedroomB    29
-#define stringID_Fan    30
-#define stringID_livRoom    31
-#define stringID_roboVaccum    32
-#define stringID_time_example    33
-#define stringID_Window    34
-#define stringID_kichenB    35
-#define stringID_DaytimeMode    36
-#define stringID_restroomB    37
-#define stringID_figmaStr_CamerEvents    38
-#define stringID_FanB    39
-#define stringID_Blinds    40
-#define stringID_LightsB    41
-#define stringID_Front    42
-#define stringID_lamp2    43
-#define stringID_figmaStr_DoorsOpen    44
-#define stringID_restroom    45
-#define stringID_OPEN    46
-#define stringID_figmaStr_Backyard_Camera    47
-#define stringID_settings    48
-#define stringID_Lights    49
-#define stringID_FrontB    50
-#define stringID_BlindsB    51
-#define stringID_AwayMode    52
-#define stringID_security    53
+#define stringID_roboVaccumB    9
+#define stringID_home    10
+#define stringID_kichen    11
+#define stringID_SleepMode    12
+#define stringID_CLOSED    13
+#define stringID_TVB    14
+#define stringID_VacationMode    15
+#define stringID_OFF    16
+#define stringID_figmaStr_Lights_On    17
+#define stringID_livRoomB    18
+#define stringID_figmaStr_WindowsOpen    19
+#define stringID_figmaStr_Doorbell_Camera    20
+#define stringID_one    21
+#define stringID_figmaStr_BlindsOpen    22
+#define stringID_ON    23
+#define stringID_zero    24
+#define stringID_TV    25
+#define stringID_DoorB    26
+#define stringID_lamp1b    27
+#define stringID_Door    28
+#define stringID_Garage    29
+#define stringID_BedroomB    30
+#define stringID_Fan    31
+#define stringID_livRoom    32
+#define stringID_roboVaccum    33
+#define stringID_time_example    34
+#define stringID_Window    35
+#define stringID_kichenB    36
+#define stringID_DaytimeMode    37
+#define stringID_restroomB    38
+#define stringID_figmaStr_CamerEvents    39
+#define stringID_FanB    40
+#define stringID_Blinds    41
+#define stringID_LightsB    42
+#define stringID_Front    43
+#define stringID_lamp2    44
+#define stringID_figmaStr_DoorsOpen    45
+#define stringID_restroom    46
+#define stringID_OPEN    47
+#define stringID_figmaStr_Backyard_Camera    48
+#define stringID_settings    49
+#define stringID_Lights    50
+#define stringID_FrontB    51
+#define stringID_BlindsB    52
+#define stringID_AwayMode    53
+#define stringID_security    54
 
 extern const leStringTable stringTable;
 
@@ -538,6 +549,7 @@ extern leTableString string_three;
 extern leTableString string_warning;
 extern leTableString string_WindowB;
 extern leTableString string_TemperatureExample;
+extern leTableString string_roboVaccumB;
 extern leTableString string_home;
 extern leTableString string_kichen;
 extern leTableString string_SleepMode;

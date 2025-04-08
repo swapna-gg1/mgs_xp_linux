@@ -45,6 +45,11 @@ static char cFanCharBuffer[2];
 static leChar p_FanBuff[2] = {0};
 
 
+/* Blinds */
+leFixedString p_Blindstring;
+static char cBlindCharBuffer[2];
+static leChar p_BlindValBuff[2] = {0};
+
 /* Window Sensor */
 leFixedString p_Windowstring;
 static char cWindowCharBuffer[2];
@@ -62,16 +67,21 @@ extern struct gpiohandle_request req_out, req_in;
 
 
  */
-bool device1State; 
-bool device2State;
-uint8_t lights_on, dev_active, windows_open;
+/* Hard coding some temporary variables for easy demo implementation.
+     * These should be eventually handled by proper functions */
+bool deviceStates[] = {true, true, true, false, true, true, false, false};  
+uint8_t lights_on, dev_active, blinds_open;
 
 /* Some variables to display camera feed */
 gfxIOCTLArg_Value arg;
 gfxPixelBuffer pixelBuffer;
 gfxDisplayDriver* gfxDisp;
 uint8_t fbuf[350*250*4];
+uint8_t Camfbuf[350*250*4];
+uint32_t buf_s;
+
 //uint8_t fbuf[1280*800*4];
+bool updateCamFeed = false;
 extern const gfxDisplayDriver* leRenderer_DisplayInterface(void);
 // *****************************************************************************
 // *****************************************************************************
@@ -89,8 +99,7 @@ static void tickTimerCallback ( uintptr_t context )
 {
     tick++;
 }*/
-
-
+#if 0
 void grabFrame(GstElement *sink)
 {
     GstSample *sample;
@@ -102,7 +111,8 @@ void grabFrame(GstElement *sink)
   
     buffer = gst_sample_get_buffer(sample);
     gst_buffer_map(buffer, &map, GST_MAP_READ);
-    
+
+#if 1
     //The frame data (map.data) is displayed
     if(leIsDrawing() == LE_FALSE)
     {
@@ -116,17 +126,61 @@ void grabFrame(GstElement *sink)
 
           gfxDisp->ioctl(GFX_IOCTL_GET_FRAMEBUFFER, (void*) &arg);
           
-          memcpy(fbuf, map.data, map.size);
-          //memcpy(fbuf, data, map.size);
+
+          memcpy(fbuf, Camfbuf, buf_s);
+          gfxDisp->blitBuffer(100, 200, &pixelBuffer);
+
+          
+         
+    }
+#endif
+      
+    gst_buffer_unmap(buffer, &map);
+    gst_sample_unref(sample);  
+
+}
+#endif
+#if 1
+void grabFrame(GstElement *sink)
+{
+    GstSample *sample;
+    GstBuffer *buffer;
+    GstMapInfo map;
+   
+    sample = gst_app_sink_pull_sample(GST_APP_SINK(sink));
+    if (!sample) return;
+  
+    buffer = gst_sample_get_buffer(sample);
+    gst_buffer_map(buffer, &map, GST_MAP_READ);
+    
+    memcpy(Camfbuf, map.data, map.size);
+    buf_s = map.size;
+    gst_buffer_unmap(buffer, &map);
+    gst_sample_unref(sample);  
+    updateCamFeed = true;
+#if 0
+    //The frame data (map.data) is displayed
+    if(leIsDrawing() == LE_FALSE)
+    {
+          gfxDisplayDriver* gfxDisp = leRenderer_DisplayInterface();
+
+          arg.value.v_uint = 0;
+          gfxDisp->ioctl(GFX_IOCTL_SET_ACTIVE_LAYER, (void *) &arg);
+
+          arg.value.v_colormode = GFX_COLOR_MODE_RGBA_8888;
+          gfxDisp->ioctl(GFX_IOCTL_SET_LAYER_COLOR_MODE, (void *) &arg);
+
+          gfxDisp->ioctl(GFX_IOCTL_GET_FRAMEBUFFER, (void*) &arg);
+          
+          memcpy(fbuf, Camfbuf, buf_s);
           gfxDisp->blitBuffer(100, 200, &pixelBuffer);
           
          
     }
+#endif
 
-    gst_buffer_unmap(buffer, &map);
-    gst_sample_unref(sample);
 }
-
+#endif
 // *****************************************************************************
 // *****************************************************************************
 // Section: SplashScreen Local Functions
@@ -161,27 +215,28 @@ void APP_Screen_Init ( void )
     leFixedString_Constructor(&p_Fanstring,  p_FanBuff, 4);
     p_Fanstring.fn->setFont(&p_Fanstring, (leFont*)& Figtree_32);
     
+    /* Blinds */
+    leFixedString_Constructor(&p_Blindstring,  p_BlindValBuff, 4);
+    p_Blindstring.fn->setFont(&p_Blindstring, (leFont*)& Figtree_32);
+    
+    
     /* WindowSensor */
     leFixedString_Constructor(&p_Windowstring,  p_WindowValBuff, 4);
     p_Windowstring.fn->setFont(&p_Windowstring, (leFont*)& Figtree_32);
     
-    /* Hard coding some temporary variables for easy demo implementation.
-     * These should be eventually handled by proper functions */
-    device1State = true;
-    device2State = false;
     
     appData.heatMode = true;
     currentT = 75;
     lights_on= 3;
     dev_active=1;
-    windows_open=0;
+    blinds_open=1;
         
     gfxPixelBufferCreate(350,
                          250,
                          GFX_COLOR_MODE_RGBA_8888,
                          fbuf,
                          &pixelBuffer);
-
+    updateCamFeed = false;
 }
 
 
@@ -342,6 +397,32 @@ void Home_Screen_OnUpdate(void)
         }
         case MAIN_SCREEN_IDLE:
         {
+#if 1
+            if(updateCamFeed == true)
+            {
+                
+                if(leIsDrawing() == LE_FALSE)
+                {
+                      gfxDisplayDriver* gfxDisp = leRenderer_DisplayInterface();
+
+                      arg.value.v_uint = 0;
+                      gfxDisp->ioctl(GFX_IOCTL_SET_ACTIVE_LAYER, (void *) &arg);
+
+                      arg.value.v_colormode = GFX_COLOR_MODE_RGBA_8888;
+                      gfxDisp->ioctl(GFX_IOCTL_SET_LAYER_COLOR_MODE, (void *) &arg);
+
+                      gfxDisp->ioctl(GFX_IOCTL_GET_FRAMEBUFFER, (void*) &arg);
+                      
+                      //memcpy(fbuf, map.data, map.size);
+                      memcpy(fbuf, Camfbuf, buf_s);
+                      gfxDisp->blitBuffer(100, 200, &pixelBuffer);
+                      
+                     
+                }
+    
+                updateCamFeed = false;
+            }
+#endif
             /* Poll for sensor input GPIO */
             if (ioctl(req_in.fd, GPIOHANDLE_GET_LINE_VALUES_IOCTL, &datain) < 0) 
             {
@@ -372,10 +453,10 @@ void event_Home_Screen_ButtonDev1_OnReleased(leButtonWidget* btn)
     /* We are hard-coding this for now. We will toggle GPIO X .
 
      * But we should add the code required to maintain device state
-     * and toggle accordingly. For now we have a global bool device1State. */
-     if(device1State)
+     * and toggle accordingly. For now we have a global bool deviceStates[0]. */
+     if(deviceStates[0]==true)
      {
-         device1State = false;
+         deviceStates[0] = false;
          Home_Screen_LabelDev1_status->fn->setString(Home_Screen_LabelDev1_status, (leString*)&string_OFF);
          Home_Screen_LabelDev1_status->fn->setScheme(Home_Screen_LabelDev1_status, &LightGreyScheme);
          Home_Screen_imageR_Dev1->fn->setImage(Home_Screen_imageR_Dev1, (leImage*)&lampBttnOff);
@@ -387,7 +468,7 @@ void event_Home_Screen_ButtonDev1_OnReleased(leButtonWidget* btn)
      }
      else
      {
-         device1State = true;
+         deviceStates[0] = true;
          Home_Screen_LabelDev1_status->fn->setString(Home_Screen_LabelDev1_status, (leString*)&string_ON);
          Home_Screen_LabelDev1_status->fn->setScheme(Home_Screen_LabelDev1_status, &SpringgreenScheme);         
          Home_Screen_imageR_Dev1->fn->setImage(Home_Screen_imageR_Dev1, (leImage*)&lampBttnOn);
@@ -407,10 +488,10 @@ void event_Home_Screen_ButtonDev8_OnReleased(leButtonWidget* btn)
 {
     /* We are hard-coding this for now. We will toggle GPIO X .
      * But we should add the code required to maintain device state
-     * and toggle accordingly. For now we have a global bool device2State. */
-     if(device2State)
+     * and toggle accordingly. For now we have a global bool deviceStates[7]. */
+     if(deviceStates[7]==true)
      {
-         device2State = false;
+         deviceStates[7] = false;
          Home_Screen_LabelDev8_status->fn->setString(Home_Screen_LabelDev8_status, (leString*)&string_OFF);
          Home_Screen_LabelDev8_status->fn->setScheme(Home_Screen_LabelDev8_status, &LightGreyScheme);
          Home_Screen_imageR_Dev8->fn->setImage(Home_Screen_imageR_Dev8, (leImage*)&fanBttnOff);
@@ -421,7 +502,7 @@ void event_Home_Screen_ButtonDev8_OnReleased(leButtonWidget* btn)
      }
      else
      {
-         device2State = true;
+         deviceStates[7] = true;
          Home_Screen_LabelDev8_status->fn->setString(Home_Screen_LabelDev8_status, (leString*)&string_ON);
          Home_Screen_LabelDev8_status->fn->setScheme(Home_Screen_LabelDev8_status, &SpringgreenScheme);
          Home_Screen_imageR_Dev8->fn->setImage(Home_Screen_imageR_Dev8, (leImage*)&fanBttnOn);
@@ -436,6 +517,179 @@ void event_Home_Screen_ButtonDev8_OnReleased(leButtonWidget* btn)
      Home_Screen_label_devicesActiveNum->fn->setString(Home_Screen_label_devicesActiveNum, (leString*)&p_Fanstring);
      ioctl(req_out.fd, GPIOHANDLE_SET_LINE_VALUES_IOCTL, &dataout);
 
+}
+
+void event_Home_Screen_ButtonDev2_OnReleased(leButtonWidget* btn)
+{
+    if(deviceStates[1]==true)
+     {
+         deviceStates[1] = false;
+         Home_Screen_LabelDev2_status->fn->setString(Home_Screen_LabelDev2_status, (leString*)&string_OFF);
+         Home_Screen_LabelDev2_status->fn->setScheme(Home_Screen_LabelDev2_status, &LightGreyScheme);
+         Home_Screen_imageR_Dev2->fn->setImage(Home_Screen_imageR_Dev2, (leImage*)&lampBttnOff);
+         Home_Screen_LabelRoom2->fn->setString(Home_Screen_LabelRoom2, (leString*)&string_kichen);
+         Home_Screen_LabelDevice2->fn->setString(Home_Screen_LabelDevice2, (leString*)&string_Lights);
+         lights_on--;
+                  
+     }
+     else
+     {
+         deviceStates[1] = true;
+         Home_Screen_LabelDev2_status->fn->setString(Home_Screen_LabelDev2_status, (leString*)&string_ON);
+         Home_Screen_LabelDev2_status->fn->setScheme(Home_Screen_LabelDev2_status, &SpringgreenScheme);         
+         Home_Screen_imageR_Dev2->fn->setImage(Home_Screen_imageR_Dev2, (leImage*)&lampBttnOn);
+         Home_Screen_LabelRoom2->fn->setString(Home_Screen_LabelRoom2, (leString*)&string_kichenB);
+         Home_Screen_LabelDevice2->fn->setString(Home_Screen_LabelDevice2, (leString*)&string_LightsB);
+         lights_on++;        
+     }
+     memset(cLightsCharBuffer, 0, sizeof(cLightsCharBuffer));
+     sprintf(cLightsCharBuffer, "%d", lights_on);
+     p_Lightstring.fn->setFromCStr(&p_Lightstring, cLightsCharBuffer);
+     Home_Screen_label_LightsOnNum->fn->setString(Home_Screen_label_LightsOnNum, (leString*)&p_Lightstring);
+}
+
+void event_Home_Screen_ButtonDev3_OnReleased(leButtonWidget* btn)
+{
+    if(deviceStates[2]==true)
+     {
+         deviceStates[2] = false;
+         Home_Screen_LabelDev3_status->fn->setString(Home_Screen_LabelDev3_status, (leString*)&string_OFF);
+         Home_Screen_LabelDev3_status->fn->setScheme(Home_Screen_LabelDev3_status, &LightGreyScheme);
+         Home_Screen_imageR_Dev3->fn->setImage(Home_Screen_imageR_Dev3, (leImage*)&lampBttnOff);
+         Home_Screen_LabelRoom3->fn->setString(Home_Screen_LabelRoom3, (leString*)&string_Bedroom);
+         Home_Screen_LabelDevice3->fn->setString(Home_Screen_LabelDevice3, (leString*)&string_Lights);
+         lights_on--;
+                  
+     }
+     else
+     {
+         deviceStates[2] = true;
+         Home_Screen_LabelDev3_status->fn->setString(Home_Screen_LabelDev3_status, (leString*)&string_ON);
+         Home_Screen_LabelDev3_status->fn->setScheme(Home_Screen_LabelDev3_status, &SpringgreenScheme);         
+         Home_Screen_imageR_Dev3->fn->setImage(Home_Screen_imageR_Dev3, (leImage*)&lampBttnOn);
+         Home_Screen_LabelRoom3->fn->setString(Home_Screen_LabelRoom3, (leString*)&string_BedroomB);
+         Home_Screen_LabelDevice3->fn->setString(Home_Screen_LabelDevice3, (leString*)&string_LightsB);
+         lights_on++;        
+     }
+     memset(cLightsCharBuffer, 0, sizeof(cLightsCharBuffer));
+     sprintf(cLightsCharBuffer, "%d", lights_on);
+     p_Lightstring.fn->setFromCStr(&p_Lightstring, cLightsCharBuffer);
+     Home_Screen_label_LightsOnNum->fn->setString(Home_Screen_label_LightsOnNum, (leString*)&p_Lightstring);
+}
+
+void event_Home_Screen_ButtonDev4_OnReleased(leButtonWidget* btn)
+{
+    if(deviceStates[3]==true)
+     {
+         deviceStates[3] = false;
+         Home_Screen_LabelDev4_status->fn->setString(Home_Screen_LabelDev4_status, (leString*)&string_OFF);
+         Home_Screen_LabelDev4_status->fn->setScheme(Home_Screen_LabelDev4_status, &LightGreyScheme);
+         Home_Screen_imageR_Dev4->fn->setImage(Home_Screen_imageR_Dev4, (leImage*)&fanBttnOff);
+         Home_Screen_LabelRoom4->fn->setString(Home_Screen_LabelRoom4, (leString*)&string_livRoom);
+         Home_Screen_LabelDevice4->fn->setString(Home_Screen_LabelDevice4, (leString*)&string_Fan);
+         dev_active--;        
+     }
+     else
+     {
+         deviceStates[3] = true;
+         Home_Screen_LabelDev4_status->fn->setString(Home_Screen_LabelDev4_status, (leString*)&string_ON);
+         Home_Screen_LabelDev4_status->fn->setScheme(Home_Screen_LabelDev4_status, &SpringgreenScheme);
+         Home_Screen_imageR_Dev4->fn->setImage(Home_Screen_imageR_Dev4, (leImage*)&fanBttnOn);
+         Home_Screen_LabelRoom4->fn->setString(Home_Screen_LabelRoom4, (leString*)&string_livRoomB);
+         Home_Screen_LabelDevice4->fn->setString(Home_Screen_LabelDevice4, (leString*)&string_FanB);
+         dev_active++;
+     }
+     memset(cFanCharBuffer, 0, sizeof(cFanCharBuffer));
+     sprintf(cFanCharBuffer, "%d", dev_active);
+     p_Fanstring.fn->setFromCStr(&p_Fanstring, cFanCharBuffer);
+     Home_Screen_label_devicesActiveNum->fn->setString(Home_Screen_label_devicesActiveNum, (leString*)&p_Fanstring);
+}
+
+void event_Home_Screen_ButtonDev5_OnReleased(leButtonWidget* btn)
+{
+    if(deviceStates[4]==true)
+     {
+         deviceStates[4] = false;
+         Home_Screen_LabelDev5_status->fn->setString(Home_Screen_LabelDev5_status, (leString*)&string_CLOSED);
+         Home_Screen_LabelDev5_status->fn->setScheme(Home_Screen_LabelDev5_status, &LightGreyScheme);
+         Home_Screen_imageR_Dev5->fn->setImage(Home_Screen_imageR_Dev5, (leImage*)&blindsBttnOff);
+         Home_Screen_LabelRoom5->fn->setString(Home_Screen_LabelRoom5, (leString*)&string_Bedroom);
+         Home_Screen_LabelDevice5->fn->setString(Home_Screen_LabelDevice5, (leString*)&string_Blinds);
+         blinds_open--;
+
+     }
+     else
+     {
+         deviceStates[4] = true;
+         Home_Screen_LabelDev5_status->fn->setString(Home_Screen_LabelDev5_status, (leString*)&string_OPEN);
+         Home_Screen_LabelDev5_status->fn->setScheme(Home_Screen_LabelDev5_status, (leString*)&SpringgreenScheme);
+         Home_Screen_imageR_Dev5->fn->setImage(Home_Screen_imageR_Dev5, (leImage*)&blindsBttnOn);
+         Home_Screen_LabelRoom5->fn->setString(Home_Screen_LabelRoom5, (leString*)&string_BedroomB);
+         Home_Screen_LabelDevice5->fn->setString(Home_Screen_LabelDevice5, (leString*)&string_BlindsB);
+         blinds_open++;
+
+     }
+     memset(cBlindCharBuffer, 0, sizeof(cBlindCharBuffer));
+     sprintf(cBlindCharBuffer, "%d", blinds_open);
+     p_Blindstring.fn->setFromCStr(&p_Blindstring, cBlindCharBuffer);
+     Home_Screen_label_blindsOnNum->fn->setString(Home_Screen_label_blindsOnNum, (leString*)&p_Blindstring);
+
+}
+void event_Home_Screen_ButtonDev6_OnReleased(leButtonWidget* btn)
+{
+    if(deviceStates[5]==true)
+     {
+         deviceStates[5] = false;
+         Home_Screen_LabelDev6_status->fn->setString(Home_Screen_LabelDev6_status, (leString*)&string_OFF);
+         Home_Screen_LabelDev6_status->fn->setScheme(Home_Screen_LabelDev6_status, &LightGreyScheme);
+         Home_Screen_imageR_Dev6->fn->setImage(Home_Screen_imageR_Dev6, (leImage*)&tvBttnOff);
+         Home_Screen_LabelRoom6->fn->setString(Home_Screen_LabelRoom6, (leString*)&string_livRoom);
+         Home_Screen_LabelDevice6->fn->setString(Home_Screen_LabelDevice6, (leString*)&string_TV);
+         dev_active--;
+
+     }
+     else
+     {
+         deviceStates[5] = true;
+         Home_Screen_LabelDev6_status->fn->setString(Home_Screen_LabelDev6_status, (leString*)&string_ON);
+         Home_Screen_LabelDev6_status->fn->setScheme(Home_Screen_LabelDev6_status, &SpringgreenScheme);
+         Home_Screen_imageR_Dev6->fn->setImage(Home_Screen_imageR_Dev6, (leImage*)&tvBttnOn);
+         Home_Screen_LabelRoom6->fn->setString(Home_Screen_LabelRoom6, (leString*)&string_livRoomB);
+         Home_Screen_LabelDevice6->fn->setString(Home_Screen_LabelDevice6, (leString*)&string_TVB);
+         dev_active++;
+
+     }
+     memset(cFanCharBuffer, 0, sizeof(cFanCharBuffer));
+     sprintf(cFanCharBuffer, "%d", dev_active);
+     p_Fanstring.fn->setFromCStr(&p_Fanstring, cFanCharBuffer);
+     Home_Screen_label_devicesActiveNum->fn->setString(Home_Screen_label_devicesActiveNum, (leString*)&p_Fanstring);
+}
+void event_Home_Screen_ButtonDev7_OnReleased(leButtonWidget* btn)
+{
+    if(deviceStates[6]==true)
+     {
+         deviceStates[6] = false;
+         Home_Screen_LabelDev7_status->fn->setString(Home_Screen_LabelDev7_status, (leString*)&string_OFF);
+         Home_Screen_LabelDev7_status->fn->setScheme(Home_Screen_LabelDev7_status, &LightGreyScheme);
+         Home_Screen_imageR_Dev7->fn->setImage(Home_Screen_imageR_Dev7, (leImage*)&robVacuumOff);
+         Home_Screen_LabelRoom7->fn->setString(Home_Screen_LabelRoom7, (leString*)&string_roboVaccum);
+         dev_active--;
+
+     }
+     else
+     {
+         deviceStates[6] = true;
+         Home_Screen_LabelDev7_status->fn->setString(Home_Screen_LabelDev7_status, (leString*)&string_ON);
+         Home_Screen_LabelDev7_status->fn->setScheme(Home_Screen_LabelDev7_status, &SpringgreenScheme);
+         Home_Screen_imageR_Dev7->fn->setImage(Home_Screen_imageR_Dev7, (leImage*)&robVacuumOn);
+         Home_Screen_LabelRoom7->fn->setString(Home_Screen_LabelRoom7, (leString*)&string_roboVaccumB);
+         dev_active++;
+
+     }
+     memset(cFanCharBuffer, 0, sizeof(cFanCharBuffer));
+     sprintf(cFanCharBuffer, "%d", dev_active);
+     p_Fanstring.fn->setFromCStr(&p_Fanstring, cFanCharBuffer);
+     Home_Screen_label_devicesActiveNum->fn->setString(Home_Screen_label_devicesActiveNum, (leString*)&p_Fanstring);
 }
 
 void event_Home_Screen_ButtonThermoMode_OnReleased(leButtonWidget* btn)

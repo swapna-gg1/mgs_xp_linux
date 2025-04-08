@@ -50,12 +50,15 @@ leButtonWidget* Home_Screen_ButtonDev1;
 leLabelWidget* Home_Screen_LabelRoom2;
 leLabelWidget* Home_Screen_LabelDevice2;
 leLabelWidget* Home_Screen_LabelDev2_status;
+leButtonWidget* Home_Screen_ButtonDev2;
 leLabelWidget* Home_Screen_LabelRoom3;
 leLabelWidget* Home_Screen_LabelDevice3;
 leLabelWidget* Home_Screen_LabelDev3_status;
+leButtonWidget* Home_Screen_ButtonDev3;
 leLabelWidget* Home_Screen_LabelRoom4;
 leLabelWidget* Home_Screen_LabelDevice4;
 leLabelWidget* Home_Screen_LabelDev4_status;
+leButtonWidget* Home_Screen_ButtonDev4;
 leImageWidget* Home_Screen_imageR_Dev5;
 leImageWidget* Home_Screen_imageR_Dev6;
 leImageWidget* Home_Screen_imageR_Dev7;
@@ -63,11 +66,14 @@ leImageWidget* Home_Screen_imageR_Dev8;
 leLabelWidget* Home_Screen_LabelRoom5;
 leLabelWidget* Home_Screen_LabelDevice5;
 leLabelWidget* Home_Screen_LabelDev5_status;
+leButtonWidget* Home_Screen_ButtonDev5;
 leLabelWidget* Home_Screen_LabelRoom6;
 leLabelWidget* Home_Screen_LabelDevice6;
 leLabelWidget* Home_Screen_LabelDev6_status;
+leButtonWidget* Home_Screen_ButtonDev6;
 leLabelWidget* Home_Screen_LabelRoom7;
 leLabelWidget* Home_Screen_LabelDev7_status;
+leButtonWidget* Home_Screen_ButtonDev7;
 leLabelWidget* Home_Screen_LabelRoom8;
 leLabelWidget* Home_Screen_LabelDevice8;
 leLabelWidget* Home_Screen_LabelDev8_status;
@@ -439,6 +445,14 @@ leResult screenShow_Home_Screen(void)
     Home_Screen_LabelDev2_status->fn->setString(Home_Screen_LabelDev2_status, (leString*)&string_ON);
     Home_Screen_imageR_Dev2->fn->addChild(Home_Screen_imageR_Dev2, (leWidget*)Home_Screen_LabelDev2_status);
 
+    Home_Screen_ButtonDev2 = leButtonWidget_New();
+    Home_Screen_ButtonDev2->fn->setPosition(Home_Screen_ButtonDev2, 0, 0);
+    Home_Screen_ButtonDev2->fn->setSize(Home_Screen_ButtonDev2, 120, 120);
+    Home_Screen_ButtonDev2->fn->setBackgroundType(Home_Screen_ButtonDev2, LE_WIDGET_BACKGROUND_NONE);
+    Home_Screen_ButtonDev2->fn->setBorderType(Home_Screen_ButtonDev2, LE_WIDGET_BORDER_NONE);
+    Home_Screen_ButtonDev2->fn->setReleasedEventCallback(Home_Screen_ButtonDev2, event_Home_Screen_ButtonDev2_OnReleased);
+    Home_Screen_imageR_Dev2->fn->addChild(Home_Screen_imageR_Dev2, (leWidget*)Home_Screen_ButtonDev2);
+
     Home_Screen_imageR_Dev3 = leImageWidget_New();
     Home_Screen_imageR_Dev3->fn->setPosition(Home_Screen_imageR_Dev3, 259, 0);
     Home_Screen_imageR_Dev3->fn->setSize(Home_Screen_imageR_Dev3, 120, 120);
@@ -469,6 +483,14 @@ leResult screenShow_Home_Screen(void)
     Home_Screen_LabelDev3_status->fn->setBackgroundType(Home_Screen_LabelDev3_status, LE_WIDGET_BACKGROUND_NONE);
     Home_Screen_LabelDev3_status->fn->setString(Home_Screen_LabelDev3_status, (leString*)&string_ON);
     Home_Screen_imageR_Dev3->fn->addChild(Home_Screen_imageR_Dev3, (leWidget*)Home_Screen_LabelDev3_status);
+
+    Home_Screen_ButtonDev3 = leButtonWidget_New();
+    Home_Screen_ButtonDev3->fn->setPosition(Home_Screen_ButtonDev3, 0, 0);
+    Home_Screen_ButtonDev3->fn->setSize(Home_Screen_ButtonDev3, 120, 120);
+    Home_Screen_ButtonDev3->fn->setBackgroundType(Home_Screen_ButtonDev3, LE_WIDGET_BACKGROUND_NONE);
+    Home_Screen_ButtonDev3->fn->setBorderType(Home_Screen_ButtonDev3, LE_WIDGET_BORDER_NONE);
+    Home_Screen_ButtonDev3->fn->setReleasedEventCallback(Home_Screen_ButtonDev3, event_Home_Screen_ButtonDev3_OnReleased);
+    Home_Screen_imageR_Dev3->fn->addChild(Home_Screen_imageR_Dev3, (leWidget*)Home_Screen_ButtonDev3);
 
     Home_Screen_imageR_Dev4 = leImageWidget_New();
     Home_Screen_imageR_Dev4->fn->setPosition(Home_Screen_imageR_Dev4, 388, 0);
@@ -501,6 +523,14 @@ leResult screenShow_Home_Screen(void)
     Home_Screen_LabelDev4_status->fn->setString(Home_Screen_LabelDev4_status, (leString*)&string_OFF);
     Home_Screen_imageR_Dev4->fn->addChild(Home_Screen_imageR_Dev4, (leWidget*)Home_Screen_LabelDev4_status);
 
+    Home_Screen_ButtonDev4 = leButtonWidget_New();
+    Home_Screen_ButtonDev4->fn->setPosition(Home_Screen_ButtonDev4, 0, 0);
+    Home_Screen_ButtonDev4->fn->setSize(Home_Screen_ButtonDev4, 120, 120);
+    Home_Screen_ButtonDev4->fn->setBackgroundType(Home_Screen_ButtonDev4, LE_WIDGET_BACKGROUND_NONE);
+    Home_Screen_ButtonDev4->fn->setBorderType(Home_Screen_ButtonDev4, LE_WIDGET_BORDER_NONE);
+    Home_Screen_ButtonDev4->fn->setReleasedEventCallback(Home_Screen_ButtonDev4, event_Home_Screen_ButtonDev4_OnReleased);
+    Home_Screen_imageR_Dev4->fn->addChild(Home_Screen_imageR_Dev4, (leWidget*)Home_Screen_ButtonDev4);
+
     Home_Screen_panel_AppliancesDevices2 = leWidget_New();
     Home_Screen_panel_AppliancesDevices2->fn->setPosition(Home_Screen_panel_AppliancesDevices2, 40, 260);
     Home_Screen_panel_AppliancesDevices2->fn->setSize(Home_Screen_panel_AppliancesDevices2, 508, 120);
@@ -512,7 +542,7 @@ leResult screenShow_Home_Screen(void)
     Home_Screen_imageR_Dev5->fn->setSize(Home_Screen_imageR_Dev5, 120, 120);
     Home_Screen_imageR_Dev5->fn->setBackgroundType(Home_Screen_imageR_Dev5, LE_WIDGET_BACKGROUND_NONE);
     Home_Screen_imageR_Dev5->fn->setBorderType(Home_Screen_imageR_Dev5, LE_WIDGET_BORDER_NONE);
-    Home_Screen_imageR_Dev5->fn->setImage(Home_Screen_imageR_Dev5, (leImage*)&tvBttnOff);
+    Home_Screen_imageR_Dev5->fn->setImage(Home_Screen_imageR_Dev5, (leImage*)&blindsBttnOn);
     Home_Screen_panel_AppliancesDevices2->fn->addChild(Home_Screen_panel_AppliancesDevices2, (leWidget*)Home_Screen_imageR_Dev5);
 
     Home_Screen_LabelRoom5 = leLabelWidget_New();
@@ -520,23 +550,31 @@ leResult screenShow_Home_Screen(void)
     Home_Screen_LabelRoom5->fn->setSize(Home_Screen_LabelRoom5, 107, 25);
     Home_Screen_LabelRoom5->fn->setScheme(Home_Screen_LabelRoom5, &WhiteScheme);
     Home_Screen_LabelRoom5->fn->setBackgroundType(Home_Screen_LabelRoom5, LE_WIDGET_BACKGROUND_NONE);
-    Home_Screen_LabelRoom5->fn->setString(Home_Screen_LabelRoom5, (leString*)&string_Bedroom);
+    Home_Screen_LabelRoom5->fn->setString(Home_Screen_LabelRoom5, (leString*)&string_BedroomB);
     Home_Screen_imageR_Dev5->fn->addChild(Home_Screen_imageR_Dev5, (leWidget*)Home_Screen_LabelRoom5);
 
     Home_Screen_LabelDevice5 = leLabelWidget_New();
     Home_Screen_LabelDevice5->fn->setPosition(Home_Screen_LabelDevice5, 6, 50);
     Home_Screen_LabelDevice5->fn->setScheme(Home_Screen_LabelDevice5, &WhiteScheme);
     Home_Screen_LabelDevice5->fn->setBackgroundType(Home_Screen_LabelDevice5, LE_WIDGET_BACKGROUND_NONE);
-    Home_Screen_LabelDevice5->fn->setString(Home_Screen_LabelDevice5, (leString*)&string_TV);
+    Home_Screen_LabelDevice5->fn->setString(Home_Screen_LabelDevice5, (leString*)&string_BlindsB);
     Home_Screen_imageR_Dev5->fn->addChild(Home_Screen_imageR_Dev5, (leWidget*)Home_Screen_LabelDevice5);
 
     Home_Screen_LabelDev5_status = leLabelWidget_New();
     Home_Screen_LabelDev5_status->fn->setPosition(Home_Screen_LabelDev5_status, 6, 79);
     Home_Screen_LabelDev5_status->fn->setSize(Home_Screen_LabelDev5_status, 103, 25);
-    Home_Screen_LabelDev5_status->fn->setScheme(Home_Screen_LabelDev5_status, &LightGreyScheme);
+    Home_Screen_LabelDev5_status->fn->setScheme(Home_Screen_LabelDev5_status, &SpringgreenScheme);
     Home_Screen_LabelDev5_status->fn->setBackgroundType(Home_Screen_LabelDev5_status, LE_WIDGET_BACKGROUND_NONE);
-    Home_Screen_LabelDev5_status->fn->setString(Home_Screen_LabelDev5_status, (leString*)&string_OFF);
+    Home_Screen_LabelDev5_status->fn->setString(Home_Screen_LabelDev5_status, (leString*)&string_OPEN);
     Home_Screen_imageR_Dev5->fn->addChild(Home_Screen_imageR_Dev5, (leWidget*)Home_Screen_LabelDev5_status);
+
+    Home_Screen_ButtonDev5 = leButtonWidget_New();
+    Home_Screen_ButtonDev5->fn->setPosition(Home_Screen_ButtonDev5, 0, 0);
+    Home_Screen_ButtonDev5->fn->setSize(Home_Screen_ButtonDev5, 120, 120);
+    Home_Screen_ButtonDev5->fn->setBackgroundType(Home_Screen_ButtonDev5, LE_WIDGET_BACKGROUND_NONE);
+    Home_Screen_ButtonDev5->fn->setBorderType(Home_Screen_ButtonDev5, LE_WIDGET_BORDER_NONE);
+    Home_Screen_ButtonDev5->fn->setReleasedEventCallback(Home_Screen_ButtonDev5, event_Home_Screen_ButtonDev5_OnReleased);
+    Home_Screen_imageR_Dev5->fn->addChild(Home_Screen_imageR_Dev5, (leWidget*)Home_Screen_ButtonDev5);
 
     Home_Screen_imageR_Dev6 = leImageWidget_New();
     Home_Screen_imageR_Dev6->fn->setPosition(Home_Screen_imageR_Dev6, 130, 0);
@@ -568,6 +606,14 @@ leResult screenShow_Home_Screen(void)
     Home_Screen_LabelDev6_status->fn->setString(Home_Screen_LabelDev6_status, (leString*)&string_ON);
     Home_Screen_imageR_Dev6->fn->addChild(Home_Screen_imageR_Dev6, (leWidget*)Home_Screen_LabelDev6_status);
 
+    Home_Screen_ButtonDev6 = leButtonWidget_New();
+    Home_Screen_ButtonDev6->fn->setPosition(Home_Screen_ButtonDev6, 0, 0);
+    Home_Screen_ButtonDev6->fn->setSize(Home_Screen_ButtonDev6, 120, 120);
+    Home_Screen_ButtonDev6->fn->setBackgroundType(Home_Screen_ButtonDev6, LE_WIDGET_BACKGROUND_NONE);
+    Home_Screen_ButtonDev6->fn->setBorderType(Home_Screen_ButtonDev6, LE_WIDGET_BORDER_NONE);
+    Home_Screen_ButtonDev6->fn->setReleasedEventCallback(Home_Screen_ButtonDev6, event_Home_Screen_ButtonDev6_OnReleased);
+    Home_Screen_imageR_Dev6->fn->addChild(Home_Screen_imageR_Dev6, (leWidget*)Home_Screen_ButtonDev6);
+
     Home_Screen_imageR_Dev7 = leImageWidget_New();
     Home_Screen_imageR_Dev7->fn->setPosition(Home_Screen_imageR_Dev7, 259, 0);
     Home_Screen_imageR_Dev7->fn->setSize(Home_Screen_imageR_Dev7, 120, 120);
@@ -591,6 +637,14 @@ leResult screenShow_Home_Screen(void)
     Home_Screen_LabelDev7_status->fn->setBackgroundType(Home_Screen_LabelDev7_status, LE_WIDGET_BACKGROUND_NONE);
     Home_Screen_LabelDev7_status->fn->setString(Home_Screen_LabelDev7_status, (leString*)&string_OFF);
     Home_Screen_imageR_Dev7->fn->addChild(Home_Screen_imageR_Dev7, (leWidget*)Home_Screen_LabelDev7_status);
+
+    Home_Screen_ButtonDev7 = leButtonWidget_New();
+    Home_Screen_ButtonDev7->fn->setPosition(Home_Screen_ButtonDev7, 0, 0);
+    Home_Screen_ButtonDev7->fn->setSize(Home_Screen_ButtonDev7, 120, 120);
+    Home_Screen_ButtonDev7->fn->setBackgroundType(Home_Screen_ButtonDev7, LE_WIDGET_BACKGROUND_NONE);
+    Home_Screen_ButtonDev7->fn->setBorderType(Home_Screen_ButtonDev7, LE_WIDGET_BORDER_NONE);
+    Home_Screen_ButtonDev7->fn->setReleasedEventCallback(Home_Screen_ButtonDev7, event_Home_Screen_ButtonDev7_OnReleased);
+    Home_Screen_imageR_Dev7->fn->addChild(Home_Screen_imageR_Dev7, (leWidget*)Home_Screen_ButtonDev7);
 
     Home_Screen_imageR_Dev8 = leImageWidget_New();
     Home_Screen_imageR_Dev8->fn->setPosition(Home_Screen_imageR_Dev8, 388, 0);
@@ -691,7 +745,7 @@ leResult screenShow_Home_Screen(void)
     Home_Screen_LabelWindowsOpenNum->fn->setBackgroundType(Home_Screen_LabelWindowsOpenNum, LE_WIDGET_BACKGROUND_NONE);
     Home_Screen_LabelWindowsOpenNum->fn->setHAlignment(Home_Screen_LabelWindowsOpenNum, LE_HALIGN_RIGHT);
     Home_Screen_LabelWindowsOpenNum->fn->setVAlignment(Home_Screen_LabelWindowsOpenNum, LE_VALIGN_TOP);
-    Home_Screen_LabelWindowsOpenNum->fn->setString(Home_Screen_LabelWindowsOpenNum, (leString*)&string_zero);
+    Home_Screen_LabelWindowsOpenNum->fn->setString(Home_Screen_LabelWindowsOpenNum, (leString*)&string_one);
     Home_Screen_panel_sensorsSummary->fn->addChild(Home_Screen_panel_sensorsSummary, (leWidget*)Home_Screen_LabelWindowsOpenNum);
 
     Home_Screen_panel_sensors = leWidget_New();
@@ -734,7 +788,7 @@ leResult screenShow_Home_Screen(void)
     Home_Screen_imageO_Dev2->fn->setSize(Home_Screen_imageO_Dev2, 120, 120);
     Home_Screen_imageO_Dev2->fn->setBackgroundType(Home_Screen_imageO_Dev2, LE_WIDGET_BACKGROUND_NONE);
     Home_Screen_imageO_Dev2->fn->setBorderType(Home_Screen_imageO_Dev2, LE_WIDGET_BORDER_NONE);
-    Home_Screen_imageO_Dev2->fn->setImage(Home_Screen_imageO_Dev2, (leImage*)&blindsBttnOn);
+    Home_Screen_imageO_Dev2->fn->setImage(Home_Screen_imageO_Dev2, (leImage*)&windowBttonOpen);
     Home_Screen_panel_sensors->fn->addChild(Home_Screen_panel_sensors, (leWidget*)Home_Screen_imageO_Dev2);
 
     Home_Screen_LabelRoom10 = leLabelWidget_New();
@@ -748,7 +802,7 @@ leResult screenShow_Home_Screen(void)
     Home_Screen_LabelDevice10->fn->setPosition(Home_Screen_LabelDevice10, 6, 50);
     Home_Screen_LabelDevice10->fn->setScheme(Home_Screen_LabelDevice10, &WhiteScheme);
     Home_Screen_LabelDevice10->fn->setBackgroundType(Home_Screen_LabelDevice10, LE_WIDGET_BACKGROUND_NONE);
-    Home_Screen_LabelDevice10->fn->setString(Home_Screen_LabelDevice10, (leString*)&string_BlindsB);
+    Home_Screen_LabelDevice10->fn->setString(Home_Screen_LabelDevice10, (leString*)&string_WindowB);
     Home_Screen_imageO_Dev2->fn->addChild(Home_Screen_imageO_Dev2, (leWidget*)Home_Screen_LabelDevice10);
 
     Home_Screen_LabelDev10_status = leLabelWidget_New();
@@ -907,12 +961,15 @@ void screenHide_Home_Screen(void)
     Home_Screen_LabelRoom2 = NULL;
     Home_Screen_LabelDevice2 = NULL;
     Home_Screen_LabelDev2_status = NULL;
+    Home_Screen_ButtonDev2 = NULL;
     Home_Screen_LabelRoom3 = NULL;
     Home_Screen_LabelDevice3 = NULL;
     Home_Screen_LabelDev3_status = NULL;
+    Home_Screen_ButtonDev3 = NULL;
     Home_Screen_LabelRoom4 = NULL;
     Home_Screen_LabelDevice4 = NULL;
     Home_Screen_LabelDev4_status = NULL;
+    Home_Screen_ButtonDev4 = NULL;
     Home_Screen_imageR_Dev5 = NULL;
     Home_Screen_imageR_Dev6 = NULL;
     Home_Screen_imageR_Dev7 = NULL;
@@ -920,11 +977,14 @@ void screenHide_Home_Screen(void)
     Home_Screen_LabelRoom5 = NULL;
     Home_Screen_LabelDevice5 = NULL;
     Home_Screen_LabelDev5_status = NULL;
+    Home_Screen_ButtonDev5 = NULL;
     Home_Screen_LabelRoom6 = NULL;
     Home_Screen_LabelDevice6 = NULL;
     Home_Screen_LabelDev6_status = NULL;
+    Home_Screen_ButtonDev6 = NULL;
     Home_Screen_LabelRoom7 = NULL;
     Home_Screen_LabelDev7_status = NULL;
+    Home_Screen_ButtonDev7 = NULL;
     Home_Screen_LabelRoom8 = NULL;
     Home_Screen_LabelDevice8 = NULL;
     Home_Screen_LabelDev8_status = NULL;
