@@ -872,7 +872,7 @@ leResult screenShow_Home_Screen(void)
     Home_Screen_imageO_Dev4->fn->addChild(Home_Screen_imageO_Dev4, (leWidget*)Home_Screen_LabelDev12_status);
 
     leAddRootWidget(root0, 0);
-    leSetLayerColorMode(0, LE_COLOR_MODE_RGBA_8888);
+    leSetLayerColorMode(0, LE_COLOR_MODE_RGB_565);
 
     // layer 1
     root1 = leWidget_New();

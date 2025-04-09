@@ -76,8 +76,10 @@ uint8_t lights_on, dev_active, blinds_open;
 gfxIOCTLArg_Value arg;
 gfxPixelBuffer pixelBuffer;
 gfxDisplayDriver* gfxDisp;
+
 uint8_t fbuf[350*250*4];
 uint8_t Camfbuf[350*250*4];
+
 uint32_t buf_s;
 
 //uint8_t fbuf[1280*800*4];
@@ -99,48 +101,7 @@ static void tickTimerCallback ( uintptr_t context )
 {
     tick++;
 }*/
-#if 0
-void grabFrame(GstElement *sink)
-{
-    GstSample *sample;
-    GstBuffer *buffer;
-    GstMapInfo map;
-   
-    sample = gst_app_sink_pull_sample(GST_APP_SINK(sink));
-    if (!sample) return;
-  
-    buffer = gst_sample_get_buffer(sample);
-    gst_buffer_map(buffer, &map, GST_MAP_READ);
 
-#if 1
-    //The frame data (map.data) is displayed
-    if(leIsDrawing() == LE_FALSE)
-    {
-          gfxDisplayDriver* gfxDisp = leRenderer_DisplayInterface();
-
-          arg.value.v_uint = 0;
-          gfxDisp->ioctl(GFX_IOCTL_SET_ACTIVE_LAYER, (void *) &arg);
-
-          arg.value.v_colormode = GFX_COLOR_MODE_RGBA_8888;
-          gfxDisp->ioctl(GFX_IOCTL_SET_LAYER_COLOR_MODE, (void *) &arg);
-
-          gfxDisp->ioctl(GFX_IOCTL_GET_FRAMEBUFFER, (void*) &arg);
-          
-
-          memcpy(fbuf, Camfbuf, buf_s);
-          gfxDisp->blitBuffer(100, 200, &pixelBuffer);
-
-          
-         
-    }
-#endif
-      
-    gst_buffer_unmap(buffer, &map);
-    gst_sample_unref(sample);  
-
-}
-#endif
-#if 1
 void grabFrame(GstElement *sink)
 {
     GstSample *sample;
@@ -158,29 +119,9 @@ void grabFrame(GstElement *sink)
     gst_buffer_unmap(buffer, &map);
     gst_sample_unref(sample);  
     updateCamFeed = true;
-#if 0
-    //The frame data (map.data) is displayed
-    if(leIsDrawing() == LE_FALSE)
-    {
-          gfxDisplayDriver* gfxDisp = leRenderer_DisplayInterface();
-
-          arg.value.v_uint = 0;
-          gfxDisp->ioctl(GFX_IOCTL_SET_ACTIVE_LAYER, (void *) &arg);
-
-          arg.value.v_colormode = GFX_COLOR_MODE_RGBA_8888;
-          gfxDisp->ioctl(GFX_IOCTL_SET_LAYER_COLOR_MODE, (void *) &arg);
-
-          gfxDisp->ioctl(GFX_IOCTL_GET_FRAMEBUFFER, (void*) &arg);
-          
-          memcpy(fbuf, Camfbuf, buf_s);
-          gfxDisp->blitBuffer(100, 200, &pixelBuffer);
-          
-         
-    }
-#endif
 
 }
-#endif
+
 // *****************************************************************************
 // *****************************************************************************
 // Section: SplashScreen Local Functions
@@ -230,12 +171,12 @@ void APP_Screen_Init ( void )
     lights_on= 3;
     dev_active=1;
     blinds_open=1;
-        
+                        
     gfxPixelBufferCreate(350,
                          250,
-                         GFX_COLOR_MODE_RGBA_8888,
+                         GFX_COLOR_MODE_RGB_565,
                          fbuf,
-                         &pixelBuffer);
+                         &pixelBuffer);                             
     updateCamFeed = false;
 }
 
@@ -408,7 +349,8 @@ void Home_Screen_OnUpdate(void)
                       arg.value.v_uint = 0;
                       gfxDisp->ioctl(GFX_IOCTL_SET_ACTIVE_LAYER, (void *) &arg);
 
-                      arg.value.v_colormode = GFX_COLOR_MODE_RGBA_8888;
+                      //arg.value.v_colormode = GFX_COLOR_MODE_RGBA_8888;
+                      arg.value.v_colormode = GFX_COLOR_MODE_RGB_565;
                       gfxDisp->ioctl(GFX_IOCTL_SET_LAYER_COLOR_MODE, (void *) &arg);
 
                       gfxDisp->ioctl(GFX_IOCTL_GET_FRAMEBUFFER, (void*) &arg);

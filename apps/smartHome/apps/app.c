@@ -112,15 +112,8 @@ void APP_Initialize ( void )
     // Create a new main loop for GStreamer
     loop = g_main_loop_new(NULL, FALSE);
     
-    // Parse the GStreamer pipeline
-#if 0    
-    pipeline = gst_parse_launch(
-        "udpsrc port=5000 buffer-size=100000 ! application/x-rtp, encoding-name=JPEG, payload=26, clock-rate=90000 "
-        "! rtpjpegdepay ! jpegdec ! videoconvert ! videoscale "
-        "! video/x-raw,format=BGRA,width=350,height=250 "
-        "! appsink name=sink sync=false", NULL);
-#endif        
-#if 1       
+    // Parse the GStreamer pipeline       
+#if 0      
     pipeline = gst_parse_launch(
     "udpsrc port=5000 buffer-size=100000 ! application/x-rtp, encoding-name=JPEG, payload=26, clock-rate=90000 "
     "! rtpjpegdepay ! jpegdec ! videoconvert ! videoflip method=rotate-180 ! videoscale "
@@ -128,6 +121,31 @@ void APP_Initialize ( void )
     "! appsink name=sink sync=false", NULL);
 #endif
 
+#if 0      
+pipeline = gst_parse_launch(
+    "udpsrc port=5000 buffer-size=100000 "
+    "! application/x-rtp, encoding-name=JPEG, payload=26, clock-rate=90000 "
+    "! rtpjpegdepay "
+    "! jpegdec "
+    "! videoconvert "
+    "! videoscale "
+    "! video/x-raw,format=RGB16,width=350,height=250 "
+    "! appsink name=sink sync=false", NULL);
+#endif
+
+#if 1
+pipeline = gst_parse_launch(
+    "udpsrc port=5000 buffer-size=100000 "
+    "! application/x-rtp, encoding-name=JPEG, payload=26, clock-rate=90000 "
+    "! rtpjpegdepay "
+    "! jpegdec "
+    "! videoconvert "
+    "! videoscale "
+    "! videoflip method=rotate-180 "
+    "! videoconvert "
+    "! video/x-raw,format=RGB16,width=350,height=250 "
+    "! appsink name=sink sync=false", NULL);
+#endif
     // Get the appsink element and connect the "new-sample" signal
     appsink = gst_bin_get_by_name(GST_BIN(pipeline), "sink");
     g_object_set(appsink, "emit-signals", TRUE, NULL);
