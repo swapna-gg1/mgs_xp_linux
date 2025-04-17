@@ -120,6 +120,6 @@ add_subdirectory(apps/dashboard)
 add_subdirectory(apps/kiosk)
 add_subdirectory(apps/pm5)
 add_subdirectory(apps/smartHome)
-
+add_subdirectory(apps/smartHomeStandAlone)
 include(cmake/AstyleFormatSource.cmake)
 
