@@ -121,5 +121,6 @@ add_subdirectory(apps/kiosk)
 add_subdirectory(apps/pm5)
 add_subdirectory(apps/smartHome)
 add_subdirectory(apps/smartHomeStandAlone)
+add_subdirectory(apps/smartHomeSA_Stream)
 include(cmake/AstyleFormatSource.cmake)
 
